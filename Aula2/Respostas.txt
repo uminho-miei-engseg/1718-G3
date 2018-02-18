@@ -1,0 +1,16 @@
+1
+1.1 - Enquanto que o random fica à espera que ocorra entropia, 
+este não é o caso do urandom, que é por isso muito mais rápido.
+
+1.2 - Visto que o haveged estava a criar entropia os dois comandos
+foram praticamente identicos em tempo.
+
+1.3 - Ao contrário do programa RandomBytes.java o programa 
+generateSecret-app.py cria apenas caracteres imprimiveis (ASCI)
+isto porque a função generateSecret da API verifica se cada 
+caracter é imprimivel antes de o escolher.
+
+2
+
+
+ 
