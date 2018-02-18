@@ -11,6 +11,38 @@ isto porque a função generateSecret da API verifica se cada
 caracter é imprimivel antes de o escolher.
 
 2
+2.1 - a)Primeiro foi necessário gerar um ficheiro do tipo .pem (chave privada) 
+utilizando o openssl genrsa -aes128 -out pKey.pem 1024. Depois utilizou-se o comando:
+python createSharedSecret-app.py 7 3 1 pKey.pem. (7 partes e quorum de 3).
+Para recuperar o segredo deve criar-se um certificado utilizando:
+openssl req -key pKey.pem -new -x509 -days 365 -out pKey.crt
+seguido de:
+python recoverSecretFromComponents-app.py 3 1 pKey.crt (dando também os componentes pedidos)
+      b)A diferença é que no recoverSecretFromComponets apenas precisamos de dar o número de 
+componentes especificados no quorum (neste caso 3), enquanto que no recoverSecretFromAllComponents
+precisamos de fornecer todos os componentes.
+
+3
+Cifrar( plainText)
+
+	secret = cifra( plainText)
+	mac = hmac( key, secret)
+
+Decifrar(cypherText, receivedMac):
+
+	mac = hmac( key, cypherText)
+	if(mac == receivedMac):
+		decifra(cypherText, key)
+	else:
+		print("not authentic\n")
+		return -1
+
+4
+
+
+
+
+
 
 
  
