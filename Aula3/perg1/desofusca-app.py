@@ -37,46 +37,45 @@ from eVotUM.Cripto import eccblind
 
 
 def printUsage():
-    print("Usage: python desofusca-app.py")
+	print("Usage: python desofusca-app.py -s <Blind Signature> -RDash <pRDashComponents>" )
 
 def parseArgs():
-    if (sys.argv[2] != "-s"):
-        printUsage()
-    else:
-		i = 3
+	if (len(sys.argv) < 2 or sys.argv[1] != "-s"):
+		printUsage()
+	else:
+		i = 2
 		s = ""
 		rdash = ""
-		while(sys.argv[i] != "-RDash" or i < len(sys.argv)):
+		while(sys.argv[i] != "-RDash" and i < len(sys.argv)):
 			s+=sys.argv[i]
-			i++
+			i+=1
 		if(i != len(sys.argv)):
 			if(sys.argv[i] == "-RDash" ):
-				while(i < len(sys.argv):
+				i+=1
+				while(i < len(sys.argv)):
 					rdash+=sys.argv[i]
-					i++
+					i+=1
 			else:
 				printUsage()
 		else:
 			printUsage()
-
-        main(s, rdash)
+		main(s, rdash)
 
 def showResults(errorCode, signature):
-    print("Output")
-    if (errorCode is None):
-        print("Signature: %s" % signature)
-    elif (errorCode == 1):
-        print("Error: pRDash components are invalid")
-    elif (errorCode == 2):
-        print("Error: blind components are invalid")
-    elif (errorCode == 3):
-        print("Error: invalid blind signature format")
+	if (errorCode is None):
+		print("%s" % signature)
+	elif (errorCode == 1):
+		print("Error: pRDash components are invalid")
+	elif (errorCode == 2):
+		print("Error: blind components are invalid")
+	elif (errorCode == 3):
+		print("Error: invalid blind signature format")
 
 def main(blindSignature, pRDashComponents):
 	inpu = open("message.components", "r")
-	blindComponents = inpu.readLine()
-    errorCode, signature = eccblind.unblindSignature(blindSignature, pRDashComponents, blindComponents)
-    showResults(errorCode, signature)
+	blindComponents = inpu.readline()
+	errorCode, signature = eccblind.unblindSignature(blindSignature, pRDashComponents, blindComponents)
+	showResults(errorCode, signature)
 
 if __name__ == "__main__":
-    parseArgs()
+	parseArgs()

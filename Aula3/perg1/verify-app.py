@@ -40,26 +40,37 @@ def printUsage():
     print("Usage: python verifySignature-app.py public-key.pem")
 
 def parseArgs():
-    if (sys.argv[2] != "-cert"):
-        printUsage()
-    else:
-		i = 3
+	if (sys.argv[1] != "-cert"):
+		printUsage()
+	else:
+		i = 2
 		cert = ""
 		msg = ""
 		sdash = ""
-		while(sys.argv[i] != "-msg" or i < len(sys.argv)):
+		f= ""
+		while(sys.argv[i] != "-msg" and i < len(sys.argv)):
 			cert+=sys.argv[i]
-			i++
+			i+=1
 		if(i != len(sys.argv)):
 			if(sys.argv[i] == "-msg" ):
-				while(sys.argv[i] != "-sDash" or i < len(sys.argv)):
+				i+=1
+				while(sys.argv[i] != "-sDash" and i < len(sys.argv)):
 					msg+=sys.argv[i]
-					i++
+					i+=1
 				if(i != len(sys.argv)):
 					if(sys.argv[i] == "-sDash" ):
-						while(i < len(sys.argv)):
+						i+=1
+						while(sys.argv[i] != "-f" and i < len(sys.argv)):
 							sdash+=sys.argv[i]
-							i++
+							i+=1
+						if(i != len(sys.argv)):
+							if(sys.argv[i] == "-f" ):
+								i+=1
+							while(i < len(sys.argv)):
+								f+=sys.argv[i]
+								i+=1
+						else:
+							printUsage()
 					else:
 						printUsage()
 				else:
@@ -68,32 +79,31 @@ def parseArgs():
 				printUsage()
 		else:
 			printUsage()
-
-        main(cert, msg, sdash)
+		main(cert, msg, sdash)
 
 def showResults(errorCode, validSignature):
-    print("Output")
-    if (errorCode is None):
-        if (validSignature):
-            print("Valid signature")
-        else:
-            print("Invalid signature")
-    elif (errorCode == 1):
-        print("Error: it was not possible to retrieve the public key")
-    elif (errorCode == 2):
-        print("Error: pR components are invalid")
-    elif (errorCode == 3):
-        print("Error: blind components are invalid")
-    elif (errorCode == 4):
-        print("Error: invalid signature format")
+	print("Output")
+	if (errorCode is None):
+		if (validSignature):
+			print("Valid signature")
+		else:
+			print("Invalid signature")
+	elif (errorCode == 1):
+		print("Error: it was not possible to retrieve the public key")
+	elif (errorCode == 2):
+		print("Error: pR components are invalid")
+	elif (errorCode == 3):
+		print("Error: blind components are invalid")
+	elif (errorCode == 4):
+		print("Error: invalid signature format")
 
 def main(eccPublicKeyPath, data, signature):
-    pemPublicKey = utils.readFile(eccPublicKeyPath)
+	pemPublicKey = utils.readFile(eccPublicKeyPath)
 	components = open("message.components", "r")
-    blindComponents = components.readLine()
-    pRComponents = components.readLine()
-    errorCode, validSignature = eccblind.verifySignature(pemPublicKey, signature, blindComponents, pRComponents, data)
-    showResults(errorCode, validSignature)
+	blindComponents = components.readline()
+	pRComponents = components.readline()
+	errorCode, validSignature = eccblind.verifySignature(pemPublicKey, signature, blindComponents, pRComponents, data)
+	showResults(errorCode, validSignature)
 
 if __name__ == "__main__":
-    parseArgs()
+	parseArgs()
