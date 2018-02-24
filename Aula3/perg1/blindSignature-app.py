@@ -37,49 +37,48 @@ import sys
 from eVotUM.Cripto import eccblind
 
 def printUsage():
-    print("Usage: python generateBlindSignature-app.py private-key.pem")
+	print("Usage: python generateBlindSignature-app.py -key <chave privada> -bmsg <Blind message>")
 
 def parseArgs():
-    if (sys.argv[2] != "-key"):
-        printUsage()
-    else:
-		i = 3
+	if (sys.argv[1] != "-key"):
+		printUsage()
+	else:
+		i = 2
 		keyarg = ""
 		bmsgarg = ""
-		while(sys.argv[i] != "-bmsg" or i < len(sys.argv)):
+		while(sys.argv[i] != "-bmsg" and i < len(sys.argv)):
 			keyarg+=sys.argv[i]
-			i++
+			i+=1
 		if(i != len(sys.argv)):
 			if(sys.argv[i] == "-bmsg" ):
-				while(i < len(sys.argv):
+				i+=1
+				while(i < len(sys.argv)):
 					bmsgarg+=sys.argv[i]
-					i++
+					i+=1
+				main(keyarg, bmsgarg)
 			else:
 				printUsage()
 		else:
 			printUsage()
 
-        main(keyarg, bmsgarg)
 
 def showResults(errorCode, blindSignature):
-    print("Output")
-    if (errorCode is None):
-        print("Blind signature: %s" % blindSignature)
-    elif (errorCode == 1):
-        print("Error: it was not possible to retrieve the private key")
-    elif (errorCode == 2):
-        print("Error: init components are invalid")
-    elif (errorCode == 3):
-        print("Error: invalid blind message format")
+	if (errorCode is None):
+		print("%s" % blindSignature)
+	elif (errorCode == 1):
+		print("Error: it was not possible to retrieve the private key")
+	elif (errorCode == 2):
+		print("Error: init components are invalid")
+	elif (errorCode == 3):
+		print("Error: invalid blind message format")
 
 def main(eccPrivateKeyPath, blindM):
-    pemKey = utils.readFile(eccPrivateKeyPath)
-    print("Input")
+	pemKey = utils.readFile(eccPrivateKeyPath)
 	initcompfile = open("xcomponents.data", "r")
-    passphrase = raw_input("Passphrase: ")
-    initComponents = initcompfile.readline()
-    errorCode, blindSignature = eccblind.generateBlindSignature(pemKey, passphrase, blindM, initComponents)
-    showResults(errorCode, blindSignature)
+	passphrase = ""
+	initComponents = initcompfile.readline()
+	errorCode, blindSignature = eccblind.generateBlindSignature(pemKey, passphrase, blindM, initComponents)
+	showResults(errorCode, blindSignature)
 
 if __name__ == "__main__":
-    parseArgs()
+	parseArgs()

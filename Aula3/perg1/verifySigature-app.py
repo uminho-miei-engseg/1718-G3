@@ -40,11 +40,36 @@ def printUsage():
     print("Usage: python verifySignature-app.py public-key.pem")
 
 def parseArgs():
-    if (len(sys.argv) != 2):
+    if (sys.argv[2] != "-cert"):
         printUsage()
     else:
-        eccPublicKeyPath = sys.argv[1]
-        main(eccPublicKeyPath)
+		i = 3
+		cert = ""
+		msg = ""
+		sdash = ""
+		while(sys.argv[i] != "-msg" or i < len(sys.argv)):
+			cert+=sys.argv[i]
+			i++
+		if(i != len(sys.argv)):
+			if(sys.argv[i] == "-msg" ):
+				while(sys.argv[i] != "-sDash" or i < len(sys.argv)):
+					msg+=sys.argv[i]
+					i++
+				if(i != len(sys.argv)):
+					if(sys.argv[i] == "-sDash" ):
+						while(i < len(sys.argv)):
+							sdash+=sys.argv[i]
+							i++
+					else:
+						printUsage()
+				else:
+					printUsage()
+			else:
+				printUsage()
+		else:
+			printUsage()
+
+        main(cert, msg, sdash)
 
 def showResults(errorCode, validSignature):
     print("Output")
@@ -62,13 +87,11 @@ def showResults(errorCode, validSignature):
     elif (errorCode == 4):
         print("Error: invalid signature format")
 
-def main(eccPublicKeyPath):
+def main(eccPublicKeyPath, data, signature):
     pemPublicKey = utils.readFile(eccPublicKeyPath)
-    print("Input")
-    data = raw_input("Original data: ")
-    signature = raw_input("Signature: ")
-    blindComponents = raw_input("Blind components: ")
-    pRComponents = raw_input("pR components: ")
+	components = open("message.components", "r")
+    blindComponents = components.readLine()
+    pRComponents = components.readLine()
     errorCode, validSignature = eccblind.verifySignature(pemPublicKey, signature, blindComponents, pRComponents, data)
     showResults(errorCode, validSignature)
 

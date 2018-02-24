@@ -37,46 +37,45 @@ from eVotUM.Cripto import eccblind
 
 
 def printUsage():
-    print("Usage: python ofusca-app.py")
+	print("Usage: python ofusca-app.py -msg <mensagem a assinar> -RDash <pRDashComponents>")
 
 def parseArgs():
-    if (sys.argv[2] != "-msg"):
-        printUsage()
-    else:
-		i = 3
+	if (sys.argv[1] != "-msg"):
+		printUsage()
+	else:
+		i = 2
 		msg = ""
 		rdash = ""
-		while(sys.argv[i] != "-RDash" or i < len(sys.argv)):
+		while(sys.argv[i] != "-RDash" and i < len(sys.argv)):
 			msg+=sys.argv[i]
-			i++
+			i+=1
 		if(i != len(sys.argv)):
 			if(sys.argv[i] == "-RDash" ):
-				while(i < len(sys.argv):
+				i+=1
+				while(i < len(sys.argv)):
 					rdash+=sys.argv[i]
-					i++
+					i+=1
 			else:
 				printUsage()
 		else:
 			printUsage()
-
-        main(msg, rdash)
+		main(msg, rdash)
 
 def showResults(errorCode, result):
-    print("Output")
-    if (errorCode is None):
-        blindComponents, pRComponents, blindM = result
-        print("Blind message: %s" % blindM)
+	if (errorCode is None):
+		blindComponents, pRComponents, blindM = result
+		print("%s" % blindM)
 		out = open("message.components", "w")
-        out.write(blindComponents)
+		out.write(blindComponents)
 		out.write("\n")
-        out.write(pRComponents)
+		out.write(pRComponents)
 		out.close()
-    elif (errorCode == 1):
-        print("Error: pRDash components are invalid")
+	elif (errorCode == 1):
+		print("Error: pRDash components are invalid")
 
 def main(data, pRDashComponents):
-    errorCode, result = eccblind.blindData(pRDashComponents, data)
-    showResults(errorCode, result)
+	errorCode, result = eccblind.blindData(pRDashComponents, data)
+	showResults(errorCode, result)
 
 if __name__ == "__main__":
-    parseArgs()
+	parseArgs()
