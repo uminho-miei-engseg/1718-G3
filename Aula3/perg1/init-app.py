@@ -29,7 +29,7 @@ def normal():
 		componentes = open('xcomponents.data', 'r')
 		componentes.readline()
 		pR = componentes.readline()
-		print("pRDashComponents:\n"+pR)
+		print(pR)
 	except:
 		print("Not initialized")
 
