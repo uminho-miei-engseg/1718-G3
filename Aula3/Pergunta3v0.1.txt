@@ -1,4 +1,4 @@
-SSH U. Alberta -
+1) SSH U. Alberta -
 
 # general
 (gen) banner: SSH-2.0-OpenSSH_5.3
@@ -131,11 +131,11 @@ SSH U. Alberta -
 (rec) -hmac-ripemd160@openssh.com           -- mac algorithm to remove 
 (rec) -hmac-sha1                            -- mac algorithm to remove 
 
-Versão - OpenSSH 5.3
+2) Versão - OpenSSH 5.3
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-SSH MIT - 
+1) SSH MIT - 
 
 # general
 (gen) banner: SSH-2.0-OpenSSH_6.7p1 Debian-5+deb8u3
@@ -213,4 +213,12 @@ SSH MIT -
 (rec) -umac-64-etm@openssh.com              -- mac algorithm to remove 
 
 
-Versão - OpenSSH 6.7p1
+2) Versão - OpenSSH 6.7p1
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+3) A versão 5.3 tem mais vulnerabilidades (dez da versão 5.3 e cinco da versão 6.7p1).
+
+4) A versão 6.7p1 é a que tem a vulnerabilidade mais grave ( CVE-2016-8858: cvss score 7.8). As duas vulnerabilidades mais graves da versão 5.3 têm ambas 7.5 de cvss score (CVE-2014-1692 e CVE-2010-4478).
+
+5) Esta vulnerabilidade permite ataques do tipo denial of service, através do envio duplicado de *KEXINIT requests*, em termos práticos isto torna o serviço indisponível(em caso de ataque bem sucedido), podendo por isso ser considerada grave.
