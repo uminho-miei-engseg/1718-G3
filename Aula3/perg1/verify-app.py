@@ -37,7 +37,7 @@ from eVotUM.Cripto import eccblind
 from eVotUM.Cripto import utils
 
 def printUsage():
-    print("Usage: python verifySignature-app.py public-key.pem")
+    print("Usage: python verify-app.py -cert <certificado do assinante> -msg <mensagem original a assinar> -sDash <Signature> -f <ficheiro do requerente>")
 
 def parseArgs():
 	if (sys.argv[1] != "-cert"):
