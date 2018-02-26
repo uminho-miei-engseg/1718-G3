@@ -2,7 +2,7 @@ import sys
 from eVotUM.Cripto import eccblind
 
 def printUsage():
-	print("Usage: python initSigner-app.py" )
+	print("Usage: python init-app.py -init(optional)" )
 
 def parseArgs():
 	if (len(sys.argv) != 2 and len(sys.argv) != 1 ):
@@ -29,7 +29,7 @@ def normal():
 		componentes = open('xcomponents.data', 'r')
 		componentes.readline()
 		pR = componentes.readline()
-		print("pRDashComponents:\n"+pR)
+		print(pR)
 	except:
 		print("Not initialized")
 
